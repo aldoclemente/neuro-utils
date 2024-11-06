@@ -12,15 +12,15 @@ This repository contains bash scripts to download and preprocess diffusion MRI d
 
 Run the following command in a terminal:
 
-	```
+```
 	./diffusion_hcp_data.sh <num_subjects>
-	```
-	`<num_subjects>` indicates the number of subjects for which you want to download and process the data. `input_idxs.txt` contains the IDs of all 488 available subjects.
-	For parallel processing, use `diffusion_hcp_data_parallel.sh`, which relies on GNU Parallel.  
+```
+
+`<num_subjects>` indicates the number of subjects for which you want to download and process the data. `input_idxs.txt` contains the IDs of all 488 available subjects. For parallel processing, use `diffusion_hcp_data_parallel.sh`, which relies on GNU Parallel.  
 	
 ## Miscellaneous
 
-	```
+```
 	#list objects in a directory
 	aws s3 ls s3://hcp-openaccess/HCP/
 
@@ -29,4 +29,4 @@ Run the following command in a terminal:
 
 	# download the whole directory (NO!)
 	aws s3 sync s3://hcp-openaccess/HCP/100307/
-	```
+```
