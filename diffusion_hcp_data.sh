@@ -1,7 +1,7 @@
 #!/bin/bash
 
 user="$(whoami)"
-m=1
+m=${1:-1}
 head -$m subject_idxs.txt > input_idxs.txt
 
 if ! [ -d Diffusion/ ]; then
