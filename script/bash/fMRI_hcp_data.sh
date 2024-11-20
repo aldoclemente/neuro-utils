@@ -15,15 +15,15 @@ help()
 OUTDIR=.
 m=1
 
-while getopts ":h:s:o:" option; do
-   case $option in
+while getopts "hs:o:" option; do
+   case "$option" in
       h) # display Help
          help
          exit;;
       s) 
-         m=$OPTARG;;
+         m=${OPTARG};;
       o) 
-      	OUTDIR=$OPTARG;;   
+      	OUTDIR=${OPTARG};;   
      \?) # Invalid option
          echo "Error: Invalid option"
          exit;;
@@ -35,7 +35,10 @@ if ! [ -d $OUTDIR ]; then
 fi
 
 head -$m subject_idxs.txt > input_idxs.txt
-cp input_idxs.txt $OUTDIR
+
+if ! [ -f $OUTDIR/input_idxs.txt ]; then
+	cp input_idxs.txt $OUTDIR
+fi
 
 cd $OUTDIR
 
