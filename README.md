@@ -29,4 +29,8 @@ Run the following command in a terminal:
 
 	# download the whole directory (NO!)
 	aws s3 sync s3://hcp-openaccess/HCP/100307/
+	
+	
+	# info 
+	wb_command -file-information /path-to-file
 ```
