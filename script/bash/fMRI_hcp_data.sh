@@ -42,17 +42,27 @@ fi
 
 cd $OUTDIR
 
-declare -a tfMRI=("tfMRI_GAMBLING_LR" "tfMRI_EMOTION_LR")
+declare -a tfMRI=("tfMRI_EMOTION_LR") #"tfMRI_GAMBLING_LR" "tfMRI_WM_LR" "tfMRI_RELATIONAL_LR")
+declare -a EVs=("fear" "neut")
 
 for i in "${tfMRI[@]}"; do
 	if ! [ -d $OUTDIR/$i ]; then
 		mkdir $OUTDIR/$i
 	fi
+	
+	if ! [ -d $OUTDIR/$i/EVs ]; then
+		mkdir $OUTDIR/$i/EVs
+	fi
+	
 	while read subject; do
 		file=$OUTDIR/$i/${subject}.Atlas.dtseries.nii
 		if ! [ -f $file ]; then
 			aws s3 cp s3://hcp-openaccess/HCP/$subject/MNINonLinear/Results/$i/$i"_"Atlas.dtseries.nii $file
+			for j in "${EVs[@]}"; do
+				aws s3 cp s3://hcp-openaccess/HCP/$subject/MNINonLinear/Results/$i/EVs/$j.txt $OUTDIR/$i/EVs/${subject}.$j.txt
+			done
 		fi
+		
 	done < input_idxs.txt
 done
 
