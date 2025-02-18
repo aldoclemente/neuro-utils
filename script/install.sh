@@ -18,4 +18,4 @@ pip install cgal
 pip install shapely
 pip install geopandas
 pip install -U pygalmesh  # sudo apt-get
-
+sudo apt-get install dcm2niix
