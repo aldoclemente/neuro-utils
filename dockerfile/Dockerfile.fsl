@@ -1,0 +1,20 @@
+FROM ubuntu:20.04
+
+RUN apt-get update  -y
+RUN apt-get upgrade -y
+RUN apt-get install -y python
+RUN apt-get install -y wget            
+RUN apt-get install -y file            
+RUN apt-get install -y dc             
+RUN apt-get install -y mesa-utils     
+RUN apt-get install -y pulseaudio      
+RUN apt-get install -y libquadmath0    
+RUN apt-get install -y libgtk2.0-0     
+RUN apt-get install -y firefox         
+RUN apt-get install -y libgomp1
+
+RUN wget https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/releases/fslinstaller.py
+RUN python ./fslinstaller.py -d /usr/local/fsl/
+
+#ENTRYPOINT [ "sh", "-c", ". /usr/local/fsl/etc/fslconf/fsl.sh && exec /bin/bash" ]
+RUN printf "export FSLDIR=/usr/local/fsl\nsource /usr/local/fsl/etc/fslconf/fsl.sh\nexport PATH=/usr/local/fsl/bin:${PATH}\n" >> /root/.bashrc
