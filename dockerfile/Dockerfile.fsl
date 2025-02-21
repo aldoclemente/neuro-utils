@@ -16,5 +16,4 @@ RUN apt-get install -y libgomp1
 RUN wget https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/releases/fslinstaller.py
 RUN python ./fslinstaller.py -d /usr/local/fsl/
 
-#ENTRYPOINT [ "sh", "-c", ". /usr/local/fsl/etc/fslconf/fsl.sh && exec /bin/bash" ]
 RUN printf "export FSLDIR=/usr/local/fsl\nsource /usr/local/fsl/etc/fslconf/fsl.sh\nexport PATH=/usr/local/fsl/bin:${PATH}\n" >> /root/.bashrc
