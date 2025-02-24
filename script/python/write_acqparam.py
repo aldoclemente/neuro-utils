@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import argparse
+import math
 import os
 
 parser = argparse.ArgumentParser()
@@ -27,6 +28,10 @@ polarity_flipped = data.get("PhaseEncodingPolarityGE", "Normal") == "Flipped"
 # Check if required fields exist
 if not phase_encoding or total_readout_time is None:
     raise ValueError("Missing PhaseEncodingDirection or TotalReadoutTime in JSON.")
+
+
+if not total_readout_time is None:
+	total_readout_time = round(total_readout_time, 3)
 
 # Determine phase encoding for FSL
 encoding_map = {
