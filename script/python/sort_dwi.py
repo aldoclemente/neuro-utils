@@ -36,7 +36,7 @@ data_sorted = data[..., sorted_indices]
 
 # FILTER
 # Set minimum number of volumes per shell
-MIN_SHELL_SIZE = 10  # Adjust this threshold as needed
+MIN_SHELL_SIZE = 7  # Adjust this threshold as needed
 
 # Count occurrences of each b-value
 bval_counts = Counter(bvals_sorted)
@@ -57,7 +57,7 @@ np.savetxt(outdir + "bvecs", bvecs_filtered, fmt="%.6f")
 # Save reordered NIfTI file
 data_filtered = data_sorted[..., keep_indices]
 new_img = nib.Nifti1Image(data_filtered, affine)
-nib.save(new_img, outdir + "data.nii.gz")
+nib.save(new_img, outdir + "filtered.nii.gz")
 
 print("Reordering & filtering complete!")
 
