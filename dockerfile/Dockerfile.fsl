@@ -1,8 +1,10 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update  -y
 RUN apt-get upgrade -y
-RUN apt-get install -y python
+RUN apt-get install -y apt-utils
+RUN apt-get install -y build-essential
+RUN apt-get install -y python3
 RUN apt-get install -y wget            
 RUN apt-get install -y file            
 RUN apt-get install -y dc             
@@ -14,15 +16,21 @@ RUN apt-get install -y firefox
 RUN apt-get install -y libgomp1
 
 RUN wget https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/releases/fslinstaller.py
-RUN python ./fslinstaller.py -d /usr/local/fsl/
+RUN python3 ./fslinstaller.py -d /usr/local/fsl/
 
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y git
 RUN git clone --recursive https://github.com/SVMTK/SVMTK
 RUN apt-get install -y python3-pip #python -m ensurepip --upgrade
-RUN cd SVMTK
-RUN python3 -m pip install .
+
+RUN cd SVMTK/
+RUN apt-get install -y libboost-all-dev
+RUN apt-get install -y libgmp3-dev
+RUN apt-get install -y libmpfr-dev
+RUN apt-get install -y cmake
+RUN apt-get install -y libeigen3-dev
 RUN pip install meshio[all]
+RUN cd SVMTK && python3 -m pip install .
 
 ENV FSLDIR "/usr/local/fsl"
 ENV PATH   "/usr/local/fsl/bin:$PATH"
