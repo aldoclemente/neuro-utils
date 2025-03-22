@@ -21,16 +21,16 @@ RUN python3 ./fslinstaller.py -d /usr/local/fsl/
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y git
 RUN git clone --recursive https://github.com/SVMTK/SVMTK
-RUN apt-get install -y python3-pip #python -m ensurepip --upgrade
+RUN apt-get install -y python3-pip 
 
-RUN cd SVMTK/
+# install SVMTK dependencies
 RUN apt-get install -y libboost-all-dev
 RUN apt-get install -y libgmp3-dev
 RUN apt-get install -y libmpfr-dev
 RUN apt-get install -y cmake
 RUN apt-get install -y libeigen3-dev
+RUN cd /SVMTK/ && python3 -m pip install .
 RUN pip install meshio[all]
-RUN cd SVMTK && python3 -m pip install .
 
 ENV FSLDIR "/usr/local/fsl"
 ENV PATH   "/usr/local/fsl/bin:$PATH"
