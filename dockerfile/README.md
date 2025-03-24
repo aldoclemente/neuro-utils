@@ -1,4 +1,4 @@
-### Get started
+### FSL - Get started
 
 Pull the docker image: 
 ```
@@ -24,8 +24,7 @@ Once finished, remember to stop your container. If you did not use the `--rm` fl
 docker stop fsl 
 ```
 
-
-### Running on apptainer (formerly, singularity)
+#### Running on apptainer (formerly, singularity)
 
 Pull the image as follows:
 ```
@@ -36,6 +35,31 @@ Run `fsl` commands using `exec`, for instance:
 /path/to/apptainer exec /path/to/fsl_latest.sif bet -h
 ```
 
+### SVMTK - Get started
+Pull the docker image: 
+```
+docker pull aldoclemente/svmtk
+```
 
+Build a 3d mesh starting from a stl file:
+```
+UTILS=/path/to/neuro-utils/script/python
+INPUT=/path/to/input.stl
 
+OUTDIR="$(dirname -- "$(realpath -- "$INPUT")")"
+BNAME=$(basename "$INPUT" .stl)
+RAW=$BNAME.stl
+REMESH=${BNAME}_remesh.stl 
+SMOOTH=${BNAME}_smooth.stl 
+REPAIR=${BNAME}_repaired.stl 
+OUTMESH=${BNAME}.mesh
+OUTVIEW=${BNAME}.xdmf
 
+docker run --rm -v $UTILS/:/utils/ -v $OUTDIR:/output/ --name=svmtk -dit aldoclemente/svmtk
+
+docker exec svmtk python3 /utils/smoothen_surface.py --stl_input /output/$RAW --output /output/$SMOOTH --n 10
+docker exec svmtk python3 /utils/repaired_surface.py --stl_input /output/$SMOOTH --output /output/$REPAIR
+docker exec svmtk python3 /utils/create_volume_mesh.py --stl_input /output/$REPAIR --output /output/$OUTMESH
+docker exec svmtk meshio convert /output/$OUTMESH /output/$OUTVIEW
+docker stop svmtk
+```
