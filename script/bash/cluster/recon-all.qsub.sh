@@ -18,7 +18,7 @@ IMG=$HOME/freesurfer_7.4.1.sif
 
 LICENSE=$HOME/.freesurfer/license.txt
 
-if [ -d $SUBJ/$ID ]; then rm -r $SUBJ/$ID; fi
+if [ -d $SUBJECTS_DIR/$ID ]; then rm -r $SUBJECTS_DIR/$ID; fi
     
-$APPTAINER exec -B $LICENSE:/usr/local/freesurfer/license.txt -B $SUBJ:/output --env SUBJECTS_DIR=/output/ $IMG recon-all -s $ID -i $T1 -T2 $T2 -all
+$APPTAINER exec -B $LICENSE:/usr/local/freesurfer/license.txt -B $SUBJECTS_DIR:/output --env SUBJECTS_DIR=/output/ $IMG recon-all -s $ID -i $T1 -T2 $T2 -all
 
