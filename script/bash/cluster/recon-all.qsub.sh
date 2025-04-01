@@ -1,9 +1,10 @@
-#!bin/bash
+#!/bin/bash
 
 #PBS -S /bin/bash
 #PBS -l nodes=1:ppn=96
 #PBS -l walltime=48:00:00
-#PBS -j oe
+#PBS -e ~/error.txt
+#PBS -o ~/output.txt
 #PBS -N recon-all
 
 SUBJECTS_DIR=$HOME/.freesurfer/subjects/
