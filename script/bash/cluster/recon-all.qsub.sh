@@ -6,6 +6,8 @@
 #PBS -j oe
 #PBS -N recon-all
 
+SUBJECTS_DIR=$HOME/.freesurfer/subjects/
+
 ID=mni_icbm152_nlin_asym_09c
 DATA=$HOME/neuro-utils/data/$ID/nifti
 T1=$DATA/mni_icbm152_t1_tal_nlin_asym_09c.nii
@@ -14,10 +16,9 @@ T2=$DATA/mni_icbm152_t2_tal_nlin_asym_09c.nii
 APPTAINER=/opt/mox/apptainer/bin/apptainer
 IMG=$HOME/freesurfer_7.4.1.sif
 
-SUBJ=$HOME/.freesurfer/subjects/
 LICENSE=$HOME/.freesurfer/license.txt
 
-mkdir -p $SUBJ
-
-$APPTAINER exec -B $LICENSE:/usr/local/freesurfer/license.txt -B $SUBJ:/output --env SUBJECTS_DIR=/output/ $IMG recon-all -s $ID -i $T1 -T2 $T2 
+if [ -d $SUBJ/$ID ]; then rm -r $SUBJ/$ID; fi
+    
+$APPTAINER exec -B $LICENSE:/usr/local/freesurfer/license.txt -B $SUBJ:/output --env SUBJECTS_DIR=/output/ $IMG recon-all -s $ID -i $T1 -T2 $T2 -all
 
