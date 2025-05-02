@@ -12,6 +12,7 @@ PETDIR="PET"
 DTIDIR="DTI" 
 UTILSDIR=$HOME/neuro-utils
 FSL=$HOME/fsl_latest.sif
+export FSLOUTPUTTYPE=NIFTI_GZ # !!!
 APPTAINER=/opt/mox/apptainer/bin/apptainer
 MNI152T1=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_asym_09c.nii
 MNI152BRAIN=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii.gz
