@@ -1,13 +1,13 @@
 
 #! /bin/bash
 
-cd ADNI
+cd $1
 
 T1DIR="T1w"
 PETDIR="PET"
 DTIDIR="DTI" 
 
-for sub in `ls`; do
+for sub in *; do
 	cd $sub 
 	
 	# T1w
