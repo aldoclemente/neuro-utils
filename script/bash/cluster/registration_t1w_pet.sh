@@ -4,7 +4,7 @@
 #PBS -l nodes=1:ppn=96,walltime=12:00:00
 #PBS -j oe
 
-# $1 subject ID
+# $1 path to subject
 
 cd $1
 
