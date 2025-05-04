@@ -19,6 +19,8 @@ MNI152T1=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_
 MNI152BRAIN=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii.gz
 MNI152MASK=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_asym_09c_mask.nii.gz
 
+
+START=$(date +%s)
 # T1w registration
 cd $T1DIR
 for k in */; do
@@ -40,7 +42,7 @@ done
 cd .. # sub
 
 # PET registration
-cd $PET
+cd $PETDIR
 for k in */; do
     cd $k
     $APPTAINER exec $FSL flirt -ref ../../$T1DIR/$k/unwarped_bet.nii.gz -in unwarped.nii.gz -dof 6 -omat func2struct.mat
@@ -52,3 +54,4 @@ for k in */; do
 done
 cd ..
 	
+echo registration time $(( $(date +%s) - $start )) secs 
