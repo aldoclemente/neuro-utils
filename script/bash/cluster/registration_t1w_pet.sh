@@ -3,9 +3,12 @@
 #PBS -S /bin/bash
 #PBS -l nodes=1:ppn=96,walltime=12:00:00
 #PBS -j oe
+#PBS -N reg-MNI152-2mm
 
 # $subject # path to subject
-cd $subject
+#cd $subject
+
+cd $HOME/ADNI3-cohort
 
 T1DIR="T1w"
 PETDIR="PET"
@@ -19,9 +22,11 @@ MNI152T1=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_
 MNI152BRAIN=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii.gz
 MNI152MASK=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_asym_09c_mask.nii.gz
 
-
 START=$(date +%s)
+
+for subject in */; do
 # T1w registration
+cd $subject
 cd $T1DIR
 for k in */; do
     cd $k
@@ -53,5 +58,5 @@ for k in */; do
     cd ..
 done
 cd ..
-	
+done
 echo registration time $(( $(date +%s) - $START )) secs 
