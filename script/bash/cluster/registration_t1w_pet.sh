@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 #PBS -S /bin/bash
-#PBS -l nodes=1:ppn=96,walltime=12:00:00
+#PBS -l nodes=1:ppn=96,walltime=24:00:00
 #PBS -j oe
 #PBS -N reg-MNI152-2mm
 
@@ -57,6 +57,8 @@ for k in */; do
     $APPTAINER exec $FSL applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm --in=unwarped.nii.gz --warp=../../$T1DIR/$k/nonlinear_transf --premat=func2struct.mat --out=warped.nii.gz
     cd ..
 done
-cd ..
+cd .. # sub
+
+cd .. # ADNI3-cohort
 done
 echo registration time $(( $(date +%s) - $START )) secs 
