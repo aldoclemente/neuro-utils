@@ -54,4 +54,4 @@ for k in */; do
 done
 cd ..
 	
-echo registration time $(( $(date +%s) - $start )) secs 
+echo registration time $(( $(date +%s) - $START )) secs 
