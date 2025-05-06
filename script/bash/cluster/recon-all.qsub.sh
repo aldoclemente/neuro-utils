@@ -10,9 +10,10 @@ SUBJECTS_DIR=$HOME/.freesurfer/subjects/
 #T1=$DATA/mni_icbm152_t1_tal_nlin_asym_09c.nii
 #T2=$DATA/mni_icbm152_t2_tal_nlin_asym_09c.nii
 
-ID=fsl_mni152_1mm
+RES=0.5mm #1mm
+ID=fsl_mni152_$RES
 DATA=$HOME/neuro-utils/data/$ID/nifti
-T1=$DATA/MNI152_T1_1mm.nii.gz
+T1=$DATA/MNI152_T1_$RES.nii.gz
 
 APPTAINER=/opt/mox/apptainer/bin/apptainer
 IMG=$HOME/freesurfer_7.4.1.sif
