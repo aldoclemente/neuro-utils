@@ -10,6 +10,8 @@
 
 cd $HOME/ADNI3-cohort
 
+INPUTFILE=$HOME/ADNI3-cohort/$inputfile
+
 T1DIR="T1w"
 PETDIR="PET"
 DTIDIR="DTI" 
@@ -24,7 +26,7 @@ MNI152MASK=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nli
 
 START=$(date +%s)
 
-for subject in */; do
+while read -r subject; do
 # T1w registration
 cd $subject
 cd $T1DIR
@@ -41,7 +43,7 @@ for k in */; do
 	$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --aff=affine_transf.mat --cout=nonlinear_transf --config=$FSLDIR/etc/flirtsch/T1_2_MNI152_2mm
 	$APPTAINER exec $FSL applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm \
 		  --in=unwarped.nii.gz --warp=nonlinear_transf --out=warped.nii.gz
-#$APPTAINER exec $FSL slices warped.nii.gz $MNI152T1 -o slices.png
+    #$APPTAINER exec $FSL slices warped.nii.gz $FSLDIR/data/standard/MNI152_T1_2mm -o $subject.$k.slices.png
     cd ..
 done
 cd .. # sub
@@ -61,5 +63,5 @@ done
 cd .. # sub
 
 cd .. # ADNI3-cohort
-done
+done < $INPUTFILE
 echo registration time $(( $(date +%s) - $START )) secs 
