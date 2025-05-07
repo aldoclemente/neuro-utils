@@ -33,7 +33,7 @@ cd $T1DIR
 for k in */; do
     cd $k
     #$APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -f 0.15 # -B Bias Field & Neck cleanup (necessario)
-    $APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -R -S -f 0.15 # -B Bias Field & Neck cleanup (necessario)
+    $APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -f 0.15 # -B Bias Field & Neck cleanup (necessario)
     # mni152 2009
 	#$APPTAINER exec $FSL flirt -ref $MNI152BRAIN -in unwarped_bet.nii.gz -omat affine_transf.mat
 	#$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --ref=$MNI152BRAIN --refmask=$MNI152MASK --aff=affine_transf.mat --cout=nonlinear_transf --config=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/config
@@ -41,7 +41,7 @@ for k in */; do
 	#	  --in=unwarped.nii.gz --warp=nonlinear_transf --out=warped.nii.gz
     # mni152 2mm 
     $APPTAINER exec $FSL flirt -dof 6 -ref $FSLDIR/data/standard/MNI152_T1_2mm_brain -in unwarped_bet.nii.gz -omat affine_transf.mat
-	$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --aff=affine_transf.mat --cout=nonlinear_transf --config=$FSLDIR/etc/flirtsch/T1_2_MNI152_2mm
+	$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --aff=affine_transf.mat --cout=nonlinear_transf --config=$FSLDIR/etc/flirtsch/T1_2_MNI152_2mm --lambda=400,200,150,75,60,45
 	$APPTAINER exec $FSL applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm \
 		  --in=unwarped.nii.gz --warp=nonlinear_transf --out=warped.nii.gz
     #$APPTAINER exec $FSL slices warped.nii.gz $FSLDIR/data/standard/MNI152_T1_2mm -o $subject.$k.slices.png
