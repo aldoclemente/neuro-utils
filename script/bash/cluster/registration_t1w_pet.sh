@@ -32,7 +32,8 @@ cd $subject
 cd $T1DIR
 for k in */; do
     cd $k
-    $APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -f 0.15 # -B Bias Field & Neck cleanup (necessario)
+    #$APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -f 0.15 # -B Bias Field & Neck cleanup (necessario)
+    $APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -R #-f 0.15 # -B Bias Field & Neck cleanup (necessario)
     # mni152 2009
 	#$APPTAINER exec $FSL flirt -ref $MNI152BRAIN -in unwarped_bet.nii.gz -omat affine_transf.mat
 	#$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --ref=$MNI152BRAIN --refmask=$MNI152MASK --aff=affine_transf.mat --cout=nonlinear_transf --config=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/config
