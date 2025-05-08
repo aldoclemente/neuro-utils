@@ -33,18 +33,22 @@ cd $T1DIR
 for k in */; do
     cd $k
     #$APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -f 0.15 # -B Bias Field & Neck cleanup (necessario)
-    $APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -f 0.15 # -B Bias Field & Neck cleanup (necessario)
+    #$APPTAINER exec $FSL bet unwarped.nii.gz unwarped_bet.nii.gz -B -f 0.15 # -B Bias Field & Neck cleanup (necessario)
     # mni152 2009
 	#$APPTAINER exec $FSL flirt -ref $MNI152BRAIN -in unwarped_bet.nii.gz -omat affine_transf.mat
 	#$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --ref=$MNI152BRAIN --refmask=$MNI152MASK --aff=affine_transf.mat --cout=nonlinear_transf --config=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/config
 	#$APPTAINER exec $FSL applywarp --ref=$MNI152T1 \
 	#	  --in=unwarped.nii.gz --warp=nonlinear_transf --out=warped.nii.gz
+    
     # mni152 2mm 
-    $APPTAINER exec $FSL flirt -dof 6 -ref $FSLDIR/data/standard/MNI152_T1_2mm_brain -in unwarped_bet.nii.gz -omat affine_transf.mat
-	$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --aff=affine_transf.mat --cout=nonlinear_transf --config=$FSLDIR/etc/flirtsch/T1_2_MNI152_2mm --lambda=400,200,150,75,60,45
-	$APPTAINER exec $FSL applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm \
-		  --in=unwarped.nii.gz --warp=nonlinear_transf --out=warped.nii.gz
+    #$APPTAINER exec $FSL flirt -dof 6 -ref $FSLDIR/data/standard/MNI152_T1_2mm_brain -in unwarped_bet.nii.gz -omat affine_transf.mat
+	#$APPTAINER exec $FSL fnirt --in=unwarped.nii.gz --aff=affine_transf.mat --cout=nonlinear_transf --config=$FSLDIR/etc/flirtsch/T1_2_MNI152_2mm --lambda=400,200,150,75,60,45
+	#$APPTAINER exec $FSL applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm \
+	#	  --in=unwarped.nii.gz --warp=nonlinear_transf --out=warped.nii.gz
     #$APPTAINER exec $FSL slices warped.nii.gz $FSLDIR/data/standard/MNI152_T1_2mm -o $subject.$k.slices.png
+    
+    $APPTAINER exec $FSL fsl_anat -i unwarped.nii.gz -o anat
+    
     cd ..
 done
 cd .. # sub
@@ -54,11 +58,11 @@ cd $PETDIR
 for k in */; do
     cd $k
     # setting -dof 6 (default 12!) see FSL documentation
-    $APPTAINER exec $FSL flirt -ref ../../$T1DIR/$k/unwarped_bet.nii.gz -in unwarped.nii.gz -dof 6 -omat func2struct.mat
+    $APPTAINER exec $FSL flirt -ref ../../$T1DIR/$k/anat/T1_biascorr.nii.gz -in unwarped.nii.gz -dof 6 -omat func2struct.mat
     # mni152 2009
     #$APPTAINER exec $FSL applywarp --ref=$MNI152T1 --in=unwarped.nii.gz --warp=../../$T1DIR/$k/nonlinear_transf --premat=func2struct.mat --out=warped.nii.gz
     # mni152 2mm
-    $APPTAINER exec $FSL applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm --in=unwarped.nii.gz --warp=../../$T1DIR/$k/nonlinear_transf --premat=func2struct.mat --out=warped.nii.gz
+    $APPTAINER exec $FSL applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm --in=unwarped.nii.gz --warp=../../$T1DIR/$k/anat/T1_biascorr.nii.gz --premat=func2struct.mat --out=PET_to_MNI_nonlin.nii.gz
     cd ..
 done
 cd .. # sub
