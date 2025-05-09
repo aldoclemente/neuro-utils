@@ -57,9 +57,41 @@ OUTVIEW=${BNAME}.xdmf
 
 docker run --rm -v $UTILS/:/utils/ -v $OUTDIR:/output/ --name=svmtk -dit aldoclemente/svmtk
 
+docker exec svmtk python3 /utils/remesh_surface.py --stl_input /output/$RAW --output /output/$REMESH --L 1.0 --n 3
 docker exec svmtk python3 /utils/smoothen_surface.py --stl_input /output/$RAW --output /output/$SMOOTH --n 10
 docker exec svmtk python3 /utils/repaired_surface.py --stl_input /output/$SMOOTH --output /output/$REPAIR
 docker exec svmtk python3 /utils/create_volume_mesh.py --stl_input /output/$REPAIR --output /output/$OUTMESH
 docker exec svmtk meshio convert /output/$OUTMESH /output/$OUTVIEW
 docker stop svmtk
 ```
+
+#### Running on apptainer
+
+```
+APPTAINER=/path/to/apptainer
+
+$APPTAINER pull docker://aldoclemente/swmtk
+```
+
+Build a 3d mesh starting from a stl file:
+```
+UTILS=$HOME/neuro-utils/script/python
+INPUT=/path/to/input.stl
+IMG=path/to/svmtk_latest.sif
+
+OUTDIR="$(dirname -- "$(realpath -- "$INPUT")")"
+BNAME=$(basename "$INPUT" .stl)
+RAW=$BNAME.stl
+REMESH=${BNAME}_remesh.stl 
+SMOOTH=${BNAME}_smooth.stl 
+REPAIR=${BNAME}_repaired.stl 
+OUTMESH=${BNAME}.mesh
+OUTVIEW=${BNAME}.xdmf 
+
+$APPTAINER exec $IMG python3 $UTILS/remesh_surface.py --stl_input $OUTDIR/$RAW --output $OUTDIR/$REMESH --L 1.0 --n 3
+$APPTAINER exec $IMG python3 $UTILS/smoothen_surface.py --stl_input $OUTDIR/$REMESH --output $OUTDIR/$SMOOTH --n 10
+$APPTAINER exec $IMG python3 $UTILS/repaired_surface.py --stl_input $OUTDIR/$SMOOTH --output $OUTDIR/$REPAIR
+$APPTAINER exec $IMG python3 $UTILS/create_volume_mesh.py --stl_input $OUTDIR/$REPAIR --output $OUTDIR/$OUTMESH
+$APPTAINER exec $IMG meshio convert $OUTDIR/$OUTMESH $OUTDIR/$OUTVIEW
+```
+Note that the first step smooths the surface of the input.
