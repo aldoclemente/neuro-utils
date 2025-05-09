@@ -4,6 +4,7 @@
 #PBS -l select=1:ncpus=2:mpiprocs=1,walltime=08:00:00
 #PBS -j oe
 
+adni3data=$HOME/ADNI3-cohort
 T1DIR="T1w"
 PETDIR="PET"
 DTIDIR="DTI" 
@@ -13,8 +14,8 @@ FSLDIR=/usr/local/fsl         # !!!
 export FSLOUTPUTTYPE=NIFTI_GZ # !!!
 APPTAINER=/opt/mox/apptainer/bin/apptainer
 
+cd $adni3data
 START=$(date +%s)
-
 #while read -r subject; do
 # T1w registration
 cd $subject
