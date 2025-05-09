@@ -25,6 +25,7 @@ for k in */; do
     # if you want to register to another template, avoid registration to MNI152_2mm (default FSL) 
     # use --nononlinreg to avoid nonlinear registration and use fnirt (you should provide a configuration file!)
     # see FSL documention
+    if [ -d anat.anat ]; then rm -r anat.anat; fi
     $APPTAINER exec $FSL fsl_anat -i unwarped.nii.gz -o anat
     cd ..
 done
