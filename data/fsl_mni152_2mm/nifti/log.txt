@@ -1,0 +1,24 @@
+mri_convert $FSLDIR/data/fsl_mni152_2mm/mri/T1.mgz ~/Desktop/neuro-utils/data/fsl_mni152_2mm/nifti/MNI152_T1_2mm_freesurfer.nii.gz # 256 x 256 x 246 
+
+cd ~/Desktop/neuro-utils/data/fsl_mni152_2mm/nifti
+
+
+# le maschere create da freesurfer hanno tutte risoluzione 256 x 256 x 256
+# quind ...
+
+fsl_anat -i MNI152_T1_2mm_freesurfer.nii.gz --nobias --clobber -o freesurfer
+
+mkdir -p freesurfer.anat
+fslreorient2std cerebral_mask.nii.gz cerebral_mask.nii.gz
+fslreorient2std MNI152_T1_2mm_freesurfer.nii.gz MNI152_T1_2mm_freesurfer.nii.gz
+bet MNI152_T1_2mm_freesurfer.nii.gz freesurfer.anat/T1_bet.nii.gz
+flirt -ref ${FSLDIR}/data/standard/MNI152_T1_2mm_brain -in freesurfer.anat/T1_bet.nii.gz -omat freesurfer.anat/T1_to_MNI_affine.mat
+fnirt --in=MNI152_T1_2mm_freesurfer.nii.gz --aff=freesurfer.anat/T1_to_MNI_affine.mat --cout=freesurfer.anat/T1_to_MNI_nonlin_field.nii.gz --config=T1_2_MNI152_2mm
+
+
+
+applywarp --ref=MNI152_T1_2mm.nii --in=MNI152_T1_2mm_freesurfer.nii.gz --out=freesurfer.anat/T1_to_MNI_nonlin.nii.gz --warp=freesurfer.anat/T1_to_MNI_nonlin_field.nii.gz
+
+applywarp --ref=MNI152_T1_2mm.nii --in=cerebral_mask.nii.gz --out=freesurfer.anat/cerebral_mask_to_MNI_nonlin.gz --warp=freesurfer.anat/T1_to_MNI_nonlin_field.nii.gz
+
+applywarp --ref=MNI152_T1_2mm.nii --in=cerebellum_cortex_mask.nii.gz --out=freesurfer.anat/cerebellum_cortex_mask_to_MNI_nonlin.nii.gz --warp=freesurfer.anat/T1_to_MNI_nonlin_field.nii.gz
