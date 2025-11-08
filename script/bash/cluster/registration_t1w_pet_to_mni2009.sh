@@ -1,9 +1,5 @@
 #!/bin/bash 
 
-#PBS -S /bin/bash
-#PBS -l select=1:ncpus=2:mpiprocs=1,walltime=08:00:00
-#PBS -j oe
-
 adni3data=$HOME/ADNI3-cohort
 T1DIR="T1w"
 PETDIR="PET"
@@ -16,10 +12,10 @@ APPTAINER=/opt/mox/apptainer/bin/apptainer
 mni=$UTILSDIR/data/mni_icbm152_nlin_asym_09c/nifti/mni_icbm152_t1_tal_nlin_asym_09c.nii
 
 cd $adni3data
-START=$(date +%s)
+
 #while read -r subject; do
 # T1w registration
-cd $subject
+cd $1
 cd $T1DIR
 for k in */; do
     cd $k
@@ -45,4 +41,4 @@ for k in */; do
     $APPTAINER exec $FSL applywarp --ref=$mni --in=unwarped.nii.gz --warp=../../$T1DIR/$k/T1_to_MNI2009_nonlin_field.nii.gz --premat=func2struct.mat --out=PET_to_MNI2009_nonlin.nii.gz
     cd ..
 done
-echo registration time $(( $(date +%s) - $START )) secs 
+
