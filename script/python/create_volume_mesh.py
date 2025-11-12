@@ -14,11 +14,11 @@ def create_volume_mesh(stlfile, output, resolution=16):
 
 if __name__ =='__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-si", "--stl_input", type=str, help="Input file")      
+    parser.add_argument("-i", "--input", type=str, help="STL input file")      
     parser.add_argument("-o", "--output", type=str, help="Output file")
     parser.add_argument("-r","--resolution", type=int, default=16, help="Resolution") 
     Z = parser.parse_args() 
 
-    create_volume_mesh(Z.stl_input, Z.output, Z.resolution)
+    create_volume_mesh(Z.input, Z.output, Z.resolution)
 
 
