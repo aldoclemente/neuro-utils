@@ -22,7 +22,8 @@ RUN pip install meshio[all]
 
 RUN apt-get update --fix-missing
 RUN apt-get install -y gmsh
-
+RUN pip install scipy
+RUN pip install nibabel
 #RUN apt-get install -y libgl1
 #RUN apt-get install -y libglu1-mesa
 #RUN apt-get install -y libxrender1
